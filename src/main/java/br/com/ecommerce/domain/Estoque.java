@@ -48,4 +48,14 @@ public class Estoque {
 		this.quantidadeReservada = quantidadeReservada;
 	}
 
+	public boolean reservar(int quantidade) {
+
+		if (quantidadeDisponivel > 0 && ( quantidadeDisponivel-quantidade>0)) {
+			quantidadeDisponivel -= quantidade;
+			quantidadeReservada += quantidade;
+			return true;
+		}
+		return false;
+	}
+
 }
