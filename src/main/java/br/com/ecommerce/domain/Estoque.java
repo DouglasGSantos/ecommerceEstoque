@@ -50,7 +50,7 @@ public class Estoque {
 
 	public boolean reservar(int quantidade) {
 
-		if (quantidadeDisponivel > 0 && ( quantidadeDisponivel-quantidade>0)) {
+		if (quantidadeDisponivel > 0 && ( quantidadeDisponivel-quantidade>=0)) {
 			quantidadeDisponivel -= quantidade;
 			quantidadeReservada += quantidade;
 			return true;
