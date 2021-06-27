@@ -8,15 +8,6 @@ public class Produto {
 	private String marca;
 	private String urlImagem;
 
-	public Produto(String codigo, String nome, String descricao, String marca, String urlImagem) {
-		super();
-		this.codigo = codigo;
-		this.nome = nome;
-		this.descricao = descricao;
-		this.marca = marca;
-		this.urlImagem = urlImagem;
-	}
-
 	public Produto() {
 		super();
 	}
