@@ -13,12 +13,14 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
+import br.com.ecommerce.application.criacao.CriarEstoqueService;
+import br.com.ecommerce.application.reserva.ReservarEstoqueApplicationService;
 import br.com.ecommerce.infrastructure.kafka.pedido.Pedido;
 import br.com.ecommerce.infrastructure.kafka.produto.Produto;
 
 @EnableKafka
 @Configuration
-public class KafkaConsumerConfig {
+public class KafkaPrudotoConsumerConfig {
 
     @Value(value = "${kafka.bootstrapAddress}")
     private String bootstrapAddress;
@@ -27,10 +29,10 @@ public class KafkaConsumerConfig {
     public ConsumerFactory<String, Produto> produtoConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "estoque_ecommerce");
-        props.put(ConsumerConfig.CLIENT_ID_CONFIG, "ecommerce");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, CriarEstoqueService.class.getName());
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); 
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
+         
         return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(Produto.class,false ) {
 		});
     }
@@ -41,23 +43,19 @@ public class KafkaConsumerConfig {
         factory.setConsumerFactory(produtoConsumerFactory());        
         return factory;
     }
-    
-    
-    
-    
+     
     
     public ConsumerFactory<String, Pedido> pedidoConsumerFactory() {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "estoque_ecommerce");
-        props.put(ConsumerConfig.CLIENT_ID_CONFIG, "ecommerce");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, ReservarEstoqueApplicationService.class.getName());
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); 
+      
         return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), new JsonDeserializer<>(Pedido.class,false ) {
 		});
     }
 
-    @Bean
+    @Bean    
     public ConcurrentKafkaListenerContainerFactory<String, Pedido> pedidoKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Pedido> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(pedidoConsumerFactory());        

@@ -50,12 +50,21 @@ public class Estoque {
 
 	public boolean reservar(int quantidade) {
 
-		if (quantidadeDisponivel > 0 && ( quantidadeDisponivel-quantidade>=0)) {
+		if (quantidadeDisponivel > 0 && (quantidadeDisponivel - quantidade >= 0)) {
 			quantidadeDisponivel -= quantidade;
 			quantidadeReservada += quantidade;
 			return true;
 		}
 		return false;
+	}
+
+	public boolean isDisponivel() {
+		return quantidadeDisponivel > 0;
+	}
+
+	public void adicionarEstoque(Long quantidade) {
+		this.quantidadeDisponivel += quantidade;
+
 	}
 
 }
